@@ -12,34 +12,37 @@ model = pickle.load(open(model_path, 'rb'))
 
 # 2. Set up the web page UI
 st.title("🎓 Student Placement Predictor")
-st.write("Enter your academic metrics to predict placement probability.")
+st.write("Enter your academic metrics to evaluate corporate placement eligibility.")
 
 # 3. Create input boxes for the user
 cgpa = st.number_input("Enter your CGPA", min_value=0.0, max_value=10.0, step=0.1)
 iq = st.number_input("Enter your IQ Level", min_value=0, max_value=200, step=1)
 
-# 4. Predict button with logical boundary overrides
+# 4. Predict button with corporate-grade evaluation logic
 if st.button("Predict Placement Status"):
     
-    # Rule 1: Strict Academic Criteria (CGPA below 5.0 is an automatic fallback)
+    # CASE 1: STRICT REGULATORY CRITERIA (RED)
     if cgpa < 5.0:
-        st.error("❌ Placement Status: NOT PLACED. A minimum CGPA of 5.0 is generally required to clear company eligibility criteria.")
+        st.error("❌ EVALUATION CRITERIA: NOT PLACED. Profile fails to meet the minimum regulatory CGPA threshold (5.0) required to unlock corporate eligibility filters.")
         
-    # Rule 2: Extreme Below-Average IQ Criteria 
-    elif iq < 75:
-        st.error("⚠️ Placement Status: NOT PLACED. Your technical problem-solving metrics drop below the standard corporate assessment threshold.")
+    elif iq < 70:
+        st.error("❌ EVALUATION CRITERIA: NOT PLACED. Cognitive assessment performance sits below the baseline organizational requirement for technical roles.")
         
-    # Rule 3: Low Profile Combination (Marginal CGPA + Below Average IQ)
-    elif cgpa < 6.5 and iq < 95:
-        st.warning("⚠️ Placement Status: HIGH RISK / NOT PLACED. The combination of a marginal CGPA and a below-average assessment score reduces probability.")
+    # CASE 2: STATISTICAL ANOMALY / DISCREPANCY DETECTED (BLUE)
+    elif cgpa >= 8.5 and iq < 90:
+        st.info("ℹ️ EVALUATION STATUS: AUDIT REQUIRED. Profile data demonstrates statistical inconsistency (High CGPA relative to lower cognitive assessment score). Credential verification recommended.")
         
-    # Rule 4: If inputs pass safety checks, fallback to the model predictions
+    # CASE 3: BORDERLINE/MARGINAL COHORT (YELLOW)
+    elif (cgpa < 6.5 and iq < 100) or (cgpa < 7.5 and iq < 85):
+        st.warning("⚠️ EVALUATION STATUS: CONDITIONAL / MAYBE. Profile features fall within the marginal corporate hiring variance. Placement probability is highly dependent on specific interview performance.")
+        
+    # CASE 4: STANDARD EVALUATION DRIVEN BY MACHINE LEARNING MODEL
     else:
         input_data = np.array([[cgpa, iq]])
         prediction = model.predict(input_data)
         
-        # Display the result based on the model's math
+        # Display the result based on the model weights
         if prediction == 1:
-            st.success("🎉 High probability of being PLACED!")
+            st.success("👑 EVALUATION STATUS: CONFIRMED PLACEMENT. Predictive modeling indicates high alignment with historical selection datasets for target corporate cohorts.")
         else:
-            st.error("⚠️ Higher risk of being NOT PLACED. Keep working hard!")
+            st.error("❌ EVALUATION STATUS: RISK IDENTIFIED. Statistical projection indicates a lower probability of placement matching current historical training data trends.")

@@ -5,7 +5,7 @@ import os
 
 # Find the exact path of this folder
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-model_path = os.path.join(BASE_DIR, 'model.pkl')
+model_path = os.path.join(BASE_DIR, 'model.pk')
 
 # 1. Load the trained model using the absolute path
 model = pickle.load(open(model_path, 'rb'))

@@ -1,9 +1,14 @@
 import streamlit as st
 import pickle
 import numpy as np
+import os
 
-# 1. Load the trained model
-model = pickle.load(open('model.pkl', 'rb'))
+# Find the exact path of this folder
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+model_path = os.path.join(BASE_DIR, 'model.pkl')
+
+# 1. Load the trained model using the absolute path
+model = pickle.load(open(model_path, 'rb'))
 
 # 2. Set up the web page UI
 st.title("🎓 Student Placement Predictor")
@@ -20,7 +25,7 @@ if st.button("Predict Placement Status"):
     prediction = model.predict(input_data)
     
     # Display the result
-    if prediction[0] == 1:
+    if prediction == 1:
         st.success("🎉 High probability of being PLACED!")
     else:
         st.error("⚠️ Higher risk of being NOT PLACED. Keep working hard!")

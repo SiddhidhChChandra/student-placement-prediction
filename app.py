@@ -75,14 +75,14 @@ def get_historical_data():
             
     return pd.DataFrame({"CGPA": cgpa_data, "IQ": iq_data, "Status": status})
 
-# 3. Set up executive page styling configuration
+# 3. Set up page configuration
 st.set_page_config(
     page_title="Corporate Placement Intelligence Terminal", 
     page_icon="🏢", 
     layout="wide"
 )
 
-# FIXED: Replaced unsafe_index with safe HTML formatting standard
+# Safe HTML formatting standard for text sizing
 st.markdown("""
     <style>
     div[data-testid="stMetricValue"] { font-size: 24px; font-weight: 700; color: #1e293b; }
@@ -152,32 +152,33 @@ with right_column:
         if cgpa < 5.0:
             final_status_text = "Rejected: Insufficient CGPA"
         elif iq < 70:
-            final_status_text = "Rejected: Low Cognitive Score"
+            final_status_text = "Rejected: Cognitive Threshold Anomaly"
         elif cgpa >= 8.5 and iq < 90:
-            final_status_text = "Audit Triggered: Data Anomaly"
+            final_status_text = "Audit Triggered: Data Discrepancy Detected"
         elif (cgpa < 6.5 and iq < 100) or (cgpa < 7.5 and iq < 85):
             final_status_text = "Conditional Advancement Margin"
         else:
             input_data = np.array([[cgpa, iq]])
             prediction = model.predict(input_data)
-            final_status_text = "Confirmed Placement Profile" if prediction == 1 else "Rejected: High Placement Risk"
+            final_status_text = "Confirmed Placement Profile" if prediction == 1 else "Rejected: High Recruitment Risk"
             
+        # Log to local history datastore
         log_prediction(cgpa, iq, final_status_text)
         
         with tab1:
             st.markdown("### Automated Screening Status Decision")
             if "Insufficient CGPA" in final_status_text:
-                st.error("🟥 **SCREENING REJECTION: INSUFFICIENT ACADEMIC MATRICES**  \nProfile parameters sit below the organizational 5.0 CGPA legal minimum standard.")
-            elif "Low Cognitive Score" in final_status_text:
-                st.error("🟥 **SCREENING REJECTION: COGNITIVE THRESHOLD ANOMALY**  \nStandardized cognitive validation score is below safe operational baseline minimum benchmarks.")
-            elif "Data Anomaly" in final_status_text:
-                st.info("🟪 **SYSTEM AUDIT TRIGGERED: DATA DISCREPANCY DETECTED**  \nIncongruent parameters observed (Elevated CGPA index conflicting with low cognitive evaluation output).")
+                st.error("🟥 **SCREENING REJECTION: INSUFFICIENT ACADEMIC MATRICES**  \n\n**Plain English Translation:** Your college GPA sits below the minimum corporate filter of 5.0. Profile eligibility locked.")
+            elif "Cognitive Threshold Anomaly" in final_status_text:
+                st.error("🟥 **SCREENING REJECTION: COGNITIVE THRESHOLD ANOMALY**  \n\n**Plain English Translation:** Your IQ score falls below the baseline standard requirement of 70 points for technical recruitment tiers.")
+            elif "Data Discrepancy" in final_status_text:
+                st.info("🟪 **SYSTEM AUDIT TRIGGERED: DATA DISCREPANCY DETECTED**  \n\n**Plain English Translation:** Your profile shows an unusually high GPA relative to a lower IQ test score. A manual background review is recommended.")
             elif "Conditional" in final_status_text:
-                st.warning("🟨 **CONDITIONAL ADVANCEMENT: MARGINAL RECRUITMENT VARIANCE**  \nStatistical models place profile vectors in a fluid evaluation margin.")
-            elif "Confirmed" in final_status_text:
-                st.success("🟩 **HIRING ACCEPTANCE RECOMMENDATION: SUCCESS PROJECTION HIGH**  \nPredictive machine learning matrices confirm optimal profile vector orientation.")
+                st.warning("🟨 **CONDITIONAL ADVANCEMENT: MARGINAL RECRUITMENT VARIANCE**  \n\n**Plain English Translation:** Your metrics fall right on the borderline. Your placement relies heavily on direct interview loop performance.")
+            elif "Confirmed Placement Profile" in final_status_text:
+                st.success("🟩 **HIRING ACCEPTANCE RECOMMENDATION: SUCCESS PROJECTION HIGH**  \n\n**Plain English Translation:** Great profile match! Your metrics strongly align with historical data clusters of students who successfully secured corporate job placements.")
             else:
-                st.error("🟥 **SCREENING REJECTION: RECRUITMENT RISK PROFILE MATCH**  \nAlgorithmic projection matrix tracks matching history trajectories with low integration performance scores.")
+                st.error("🟥 **SCREENING REJECTION: RECRUITMENT RISK PROFILE MATCH**  \n\n**Plain English Translation:** The predictive model tracks matching data trajectories with historically low selection placement cycles.")
         
         with tab2:
             st.markdown("### Operational Clustering Visualization")

@@ -16,7 +16,15 @@ st.write("Enter your academic metrics to evaluate corporate placement eligibilit
 
 # 3. Create input boxes for the user
 cgpa = st.number_input("Enter your CGPA", min_value=0.0, max_value=10.0, step=0.1)
-iq = st.number_input("Enter your IQ Level", min_value=0, max_value=200, step=1)
+
+# Added 'help' parameter here to guide laymen users
+iq = st.number_input(
+    "Enter your IQ Level", 
+    min_value=0, 
+    max_value=200, 
+    step=1,
+    help="Average human IQ is 100. Most people (about 68%) score between 85 and 115."
+)
 
 # 4. Predict button with corporate-grade evaluation logic
 if st.button("Predict Placement Status"):

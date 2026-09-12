@@ -1,7 +1,7 @@
 from pathlib import Path
 from urllib.request import urlopen
 
-URL = 'https://raw.githubusercontent.com/Datatrooper/boston_housing/main/Housing.csv'
+URL = 'https://huggingface.co/spaces/Datatrooper/boston_housing/resolve/main/Housing.csv?download=true'
 OUTPUT = Path('Housing.csv')
 
 with urlopen(URL) as response:
